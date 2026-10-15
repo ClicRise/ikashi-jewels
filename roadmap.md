@@ -1,3 +1,4 @@
-- [x] Rebrand the site for Twirl and Swirl using the client's reference content and local crochet photos.
-- [x] Add the home page, handmade collection, maker story, custom order flow, and contact FAQs.
-- [x] Route product and custom-order enquiries to WhatsApp with client contact details.
+- [x] Build five Ikashi Jewels pages with uploaded brand and jewellery imagery.
+- [x] Include additional yellow sapphire/topaz necklace set (8.png).
+- [x] Add item-specific WhatsApp enquiries, consultation and direct contact links.
+- [x] Verify pages, images and enquiry flow.
