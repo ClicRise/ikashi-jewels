@@ -4,7 +4,6 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
-  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -13,7 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { SiteHeader, SiteFooter } from '@/components/jewellery';
+import { Header, Footer, FloatingChat } from "@/components/store/shared";
 
 function NotFoundComponent() {
   return (
@@ -64,7 +63,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
             Try again
           </button>
           <a
-            href="/"
+            href={import.meta.env.BASE_URL}
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             Go home
@@ -80,6 +79,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "Twirl and Swirl | Handmade Crochet" },
+      { name: "description", content: "Handmade crochet by Aparna in Mumbai. Bags, flowers and little everyday joys." },
+      { name: "author", content: "Twirl and Swirl" },
+      { property: "og:title", content: "Twirl and Swirl | Handmade Crochet" },
+      { property: "og:description", content: "Handmade crochet by Aparna in Mumbai. Bags, flowers and little everyday joys." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -89,7 +93,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: `${import.meta.env.BASE_URL}favicon.png`, type: "image/png" },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600&display=swap' },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" },
     ],
   }),
   shellComponent: RootShell,
@@ -114,40 +120,13 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const isHomePage = pathname === "/" || pathname === "";
 
   return (
     <QueryClientProvider client={queryClient}>
-      {isHomePage ? (
-        <>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <SiteHeader />
-          <Outlet />
-          <SiteFooter />
-        </>
-      ) : (
-        <main className="flex min-h-screen items-center justify-center bg-background px-6 py-16">
-          <section className="max-w-lg text-center">
-            <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-              Ikashi Jewels
-            </p>
-            <h1 className="mt-5 font-serif text-4xl font-medium text-foreground sm:text-5xl">
-              Demo preview
-            </h1>
-            <p className="mt-4 text-base leading-7 text-muted-foreground">
-              For this client demo, only the home page is available. Please return
-              to the home page to continue browsing.
-            </p>
-            <Link
-              to="/"
-              className="mt-8 inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Return to home
-            </Link>
-          </section>
-        </main>
-      )}
+      <Header />
+      <main><Outlet /></main>
+      <Footer />
+      <FloatingChat />
     </QueryClientProvider>
   );
 }
